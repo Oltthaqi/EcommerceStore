@@ -1,0 +1,184 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Navbar container */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(90deg, #1a1a1a, #333);
+  padding: 1rem 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  top: 0;
+  z-index: 1000;
+  width: 100%;
+}
+
+/* Logo style */
+.logo a {
+  color: #fff; /* White text */
+  text-decoration: none;
+  font-size: 2rem; /* Larger font size */
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+.logo a:hover {
+  color: #ff6347; /* Tomato color on hover */
+}
+.logo {
+  margin-right: 100px;
+}
+
+/* Centered navigation links */
+.nav-center {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+}
+
+/* Navigation links list */
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 2rem;
+  margin: 0;
+  padding: 0;
+}
+
+/* Individual navigation link item */
+.nav-links li {
+  margin: 0;
+}
+
+/* Navigation link style */
+.nav-links a {
+  color: #fff; /* White text */
+  text-decoration: none;
+  font-size: 1.1rem;
+  font-weight: 500;
+  position: relative;
+  padding: 0.5rem 0;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+/* Hover effect for navigation links */
+.nav-links a::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: #ff6347;
+  transform-origin: bottom right;
+  transition: transform 0.25s ease-out;
+}
+.nav-links a:hover::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
+.nav-links a:hover {
+  color: #ff6347; /* Tomato color */
+}
+
+/* Right section of the navbar */
+.nav-right {
+  display: flex;
+  align-items: center;
+}
+
+/* Authentication links list */
+.auth-links {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+}
+
+/* Individual authentication link item */
+.auth-links li {
+  margin: 0;
+}
+
+/* Authentication link style */
+.auth-links a {
+  color: #fff; /* White text */
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 500;
+  border: 1px solid #ff6347; /* Tomato border */
+  border-radius: 4px; /* Rounded corners */
+  padding: 0.5rem 1rem;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Hover effect for authentication links */
+.auth-links a:hover {
+  background-color: #ff6347; /* Tomato background */
+  color: #fff; /* White text */
+}
+
+/* Profile picture container */
+.profile-pic {
+  position: relative;
+}
+
+/* Profile picture image */
+.profile-pic img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%; /* Circular image */
+  margin-left: 0.5rem;
+  border: 2px solid #ff6347; /* Tomato border */
+  transition: border 0.3s ease;
+}
+
+.profile-pic img:hover {
+  border: 2px solid #fff; /* White border on hover */
+}
+
+/* Profile picture button */
+.profile-pic-button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%; /* Circular button */
+  margin-left: 0.3rem;
+  z-index: 1;
+  background: none;
+  border: none;
+  padding: 0;
+  margin-right: 10px;
+}
+.opcHidden {
+  opacity: 0;
+}
+
+/* Profile image overlay */
+.profile-img {
+  border-radius: 50%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%; /* Cover entire button */
+  height: 100%; /* Cover entire button */
+  object-fit: cover;
+  margin-left: 0; /* Maintain aspect ratio */
+}
+
+/* Styling for welcome text */
+.navtext {
+  color: #ff6347; /* Tomato color */
+  padding-right: 20px;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+.navtext:hover {
+  color: #fff; /* White color on hover */
+}
