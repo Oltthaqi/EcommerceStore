@@ -9,7 +9,6 @@ import Dropdown from "react-bootstrap/Dropdown";
 import { useSelector } from "react-redux";
 
 const Navbar = () => {
-  const user = useSelector((state) => state.user.value);
   const [image, setImage] = useState("");
   const [username, setUsername] = useState("");
   const [loggedIn, setLoggedIn] = useState(false);
@@ -64,10 +63,10 @@ const Navbar = () => {
             <Link to="/">Home</Link>
           </li>
           <li>
-            <Link to="/about">About</Link>
+            <Link to="/Products">Products</Link>
           </li>
           <li>
-            <Link to="/services">Services</Link>
+            <Link to="/services">About</Link>
           </li>
           <li>
             <Link to="/contact">Contact</Link>
@@ -77,7 +76,7 @@ const Navbar = () => {
       <div className="nav-right">
         {loggedIn ? (
           <>
-            <span className="navtext">Welcome back, {user.username}!</span>
+            <span className="navtext">Welcome back, {username}!</span>
             <div className="profile-pic">
               <button className="profile-pic-button ">
                 <Dropdown className="profile-pic-button">

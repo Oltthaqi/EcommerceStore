@@ -4,77 +4,160 @@ import CarouselHomePage from "./carousel";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Button from "react-bootstrap/Button";
-import Card from "react-bootstrap/Card";
+
+import { Link } from "react-router-dom";
 import Footer from "../footer/footer.jsx";
-import { useSelector } from "react-redux";
+import {
+  MDBContainer,
+  MDBRow,
+  MDBCol,
+  MDBCard,
+  MDBCardBody,
+  MDBCardImage,
+  MDBIcon,
+} from "mdb-react-ui-kit";
 
 const Home = () => {
   const [products, setProducts] = useState([]);
 
-  function getDailySeed() {
-    const date = new Date();
-    const year = date.getFullYear();
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-    return year * 10000 + month * 100 + day;
-  }
-
-  function seededRandom(seed) {
-    var x = Math.sin(seed) * 10000;
-    return x - Math.floor(x);
-  }
-
-  function getRandomDailyIndices(arrayLength, count) {
-    const seed = getDailySeed();
-    const uniqueIndices = new Set();
-
-    while (uniqueIndices.size < count) {
-      const randomValue = seededRandom(seed + uniqueIndices.size);
-      uniqueIndices.add(Math.floor(randomValue * arrayLength));
-    }
-
-    return Array.from(uniqueIndices);
-  }
-
   const getProducts = async () => {
     try {
       const res = await axios.get("https://localhost:7196/api/Product");
-      const randomIndices = getRandomDailyIndices(res.data.length, 4);
-      const selectedProducts = randomIndices.map((index) => res.data[index]);
+
+      const ratedProducts = res.data.filter(
+        (product) => product.rating === 5 && product.available === "yes"
+      );
+      const selectedProducts = ratedProducts.slice(0, 3);
       setProducts(selectedProducts);
     } catch (err) {
       toast.error("Couldn't load products");
+      return;
     }
   };
 
   useEffect(() => {
     getProducts();
   }, []);
+  const renderStars = (rating) => {
+    const fullStars = Math.floor(rating);
+    const emptyStars = 5 - fullStars;
 
+    return (
+      <>
+        {Array(fullStars)
+          .fill()
+          .map((_, index) => (
+            <MDBIcon
+              key={`full-${index}`}
+              fas
+              icon="star"
+              className="text-warning"
+            />
+          ))}
+        {Array(emptyStars)
+          .fill()
+          .map((_, index) => (
+            <MDBIcon
+              key={`empty-${index}`}
+              far
+              icon="star"
+              className="text-warning"
+            />
+          ))}
+      </>
+    );
+  };
   return (
     <div className="home-content">
       <CarouselHomePage />
       <div className="productsOfTheWeek">
         {products.length > 0 ? (
-          products.map((product) => (
-            <Card key={product.id} style={{ width: "18rem" }}>
-              <Card.Img
-                variant="top"
-                src={`data:image/jpeg;base64,${product.imgbase64}`}
-              />
-              <Card.Body>
-                <Card.Title>{product.name}</Card.Title>
-                <Card.Text>{product.description}</Card.Text>
-                <Card.Text>Price: {product.price}€</Card.Text>
-                <Button variant="primary">Order now</Button>
-              </Card.Body>
-            </Card>
-          ))
+          <MDBContainer fluid className="my-5">
+            <MDBRow>
+              {products.map((product) => (
+                <MDBCol
+                  key={product.id}
+                  md="12"
+                  lg="4"
+                  className="mb-4 mb-lg-0"
+                >
+                  <MDBCard>
+                    <div className="d-flex justify-content-between p-3">
+                      <p className="lead mb-0">{product.name}</p>
+                    </div>
+                    <MDBCardImage
+                      src={`data:image/jpeg;base64,${product.img}`}
+                      position="top"
+                      alt={product.name}
+                    />
+                    {product.priceDiscount == null ? (
+                      <MDBCardBody>
+                        <div className="d-flex justify-content-between">
+                          <p className="small">
+                            <a href="#!" className="text-muted">
+                              {product.category}
+                            </a>
+                          </p>
+                        </div>
+
+                        <div className="d-flex justify-content-between mb-3">
+                          <h5 className="mb-0">{product.name}</h5>
+                          <h5 className="text-dark mb-0">${product.price}</h5>
+                        </div>
+
+                        <div className="d-flex justify-content-between mb-2">
+                          <p className="text-muted mb-0">
+                            Available:{" "}
+                            <span className="fw-bold">{product.available}</span>
+                          </p>
+                          <div className="ms-auto text-warning">
+                            {renderStars(product.rating)}
+                          </div>
+                        </div>
+                      </MDBCardBody>
+                    ) : (
+                      <MDBCardBody>
+                        <div className="d-flex justify-content-between">
+                          <p className="small">
+                            <a href="#!" className="text-muted">
+                              {product.category}
+                            </a>
+                          </p>
+                          <p className="small text-danger">
+                            <s>${product.price}</s>
+                          </p>
+                        </div>
+
+                        <div className="d-flex justify-content-between mb-3">
+                          <h5 className="mb-0">{product.name}</h5>
+                          <h5 className="text-dark mb-0">
+                            ${product.priceDiscount}
+                          </h5>
+                        </div>
+
+                        <div className="d-flex justify-content-between mb-2">
+                          <p className="text-muted mb-0">
+                            Available:{" "}
+                            <span className="fw-bold">{product.available}</span>
+                          </p>
+                          <div className="ms-auto text-warning">
+                            {renderStars(product.rating)}
+                          </div>
+                        </div>
+                      </MDBCardBody>
+                    )}
+                  </MDBCard>
+                </MDBCol>
+              ))}
+            </MDBRow>
+          </MDBContainer>
         ) : (
           <p>No products available</p>
         )}
-        <button className="seeMore">see more!</button>
+        <Link to="/Products">
+          {" "}
+          <button className="seeMore">see more</button>
+        </Link>
       </div>
       <Footer />
       <ToastContainer />

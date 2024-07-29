@@ -30,6 +30,7 @@ namespace Ecomerce_Store.Controllers
             if (file == null || file.Length == 0)
             {
                 return BadRequest("No file uploaded");
+
             }
             else
             {
@@ -41,8 +42,16 @@ namespace Ecomerce_Store.Controllers
                         byte[] byteArray = memoryStream.ToArray();
                         p.img = byteArray;
                         p.imgbase64 = Convert.ToBase64String(byteArray);
-
                         p.Orders = null;
+                        if(p.rating == null || p.rating > 5)
+                        {
+                            p.rating = 5;
+                        }
+                        if(!p.available.Equals("yes"))
+                        {
+                            p.available = "no";
+                        }
+
 
                         _dataContext.Products.Add(p);
                         await _dataContext.SaveChangesAsync();
@@ -69,12 +78,17 @@ namespace Ecomerce_Store.Controllers
             else
             {
                 product.Name = string.IsNullOrEmpty(p.Name) ? product.Name : p.Name;
-                product.Price = decimal.Equals(p.Price , null) ? product.Price : p.Price;
+                product.Price = decimal.Equals(p.PriceDiscount, null) ? product.PriceDiscount : p.PriceDiscount;
+                product.PriceDiscount = decimal.Equals(p.Price, null) ? product.Price : p.Price;
                 product.Description = string.IsNullOrEmpty(p.Description) ? product.Description : p.Description;
+                product.available = string.IsNullOrEmpty(p.available) ? product.available : p.available;
                 product.Category = string.IsNullOrEmpty(p.Category) ? product.Category : p.Category;
                 product.img =product.img;
                 product.imgbase64 = product.imgbase64;
-               // product.Orders = null;
+                if (p.rating != null || p.rating == 0 || p.rating > 5)
+                {
+                    product.rating = p.rating;
+                }
 
                 await _dataContext.SaveChangesAsync();
                 return Ok(product);

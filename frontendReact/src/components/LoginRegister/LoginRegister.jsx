@@ -4,11 +4,9 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useDispatch } from "react-redux";
-import { login } from "../features/user";
+
 
 function LoginRegister() {
-  const dispatch = useDispatch();
   const [signIn, setSignIn] = React.useState(true);
   const toggle = (value) => setSignIn(value);
   const navigate = useNavigate();
@@ -179,18 +177,7 @@ function LoginRegister() {
             <Components.Anchor href="#">
               Forgot your password?
             </Components.Anchor>
-            <Components.Button
-              onClick={() => {
-                dispatch(
-                  login({
-                    username: formData.get("username"),
-                    password: formData.get("password"),
-                  })
-                );
-              }}
-            >
-              Sign In
-            </Components.Button>
+            <Components.Button>Sign In</Components.Button>
           </Components.Form>
         </Components.SignInContainer>
         <Components.OverlayContainer signinIn={signIn}>

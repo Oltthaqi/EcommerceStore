@@ -1,6 +1,5 @@
 ﻿using Ecomerce_Store.Data;
 using Ecomerce_Store.Model;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -16,7 +15,7 @@ namespace Ecomerce_Store.Controllers
         public static Users user = new Users();
         private readonly IConfiguration _Configuration;
         private readonly DataContext _dataContext;
-        public AuthController(IConfiguration configuration , DataContext dataContext)
+        public AuthController(IConfiguration configuration, DataContext dataContext)
         {
             _Configuration = configuration;
             _dataContext = dataContext;
@@ -26,26 +25,26 @@ namespace Ecomerce_Store.Controllers
 
         [HttpPost("Login")]
 
-            public ActionResult<Users> Login(UserDto request)
-            {
+        public ActionResult<Users> Login(UserDto request)
+        {
             var user = _dataContext.Users.FirstOrDefault(u => u.Username == request.Username);
-            if (user.Username != request.Username ||!BCrypt.Net.BCrypt.Verify(request.Password , user.Password)) 
+            if (user.Username != request.Username || !BCrypt.Net.BCrypt.Verify(request.Password, user.Password))
             {
                 return BadRequest("Username or password is incorrect");
             }
             string token = createToken(user);
 
             return Ok(token);
-            }
+        }
 
         private string createToken(Users user)
         {
             if (user != null)
             {
                 List<Claim> claims = new List<Claim>
-    {
-        new Claim(ClaimTypes.Name, user.Username)
-    };
+                 {
+                      new Claim(ClaimTypes.Name, user.Username)
+                 };
 
                 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
                     _Configuration.GetSection("appSettings:Token").Value!));
@@ -69,5 +68,5 @@ namespace Ecomerce_Store.Controllers
         }
 
 
-        }
+    }
 }

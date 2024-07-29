@@ -13,7 +13,7 @@ namespace Ecomerce_Store.Model
         public string? Password { get; set; }
         public string? Role { get; set; }
         public byte[]? Profileimg { get; set; }
-        public string profileImgBase64 { get; set; }
+        public string? profileImgBase64 { get; set; }
 
 
         public ICollection<Order>? Orders { get; set; }

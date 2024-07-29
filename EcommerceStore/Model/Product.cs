@@ -8,7 +8,10 @@
         public decimal? Price { get; set; }
         public string? Category { get; set; }
         public byte[]? img { get; set; }
-        public string imgbase64 { get; set; }
+        public string? imgbase64 { get; set; }
+        public decimal? PriceDiscount { get; set; }
+        public int? rating { get; set; }
+        public string? available { get; set; }
 
 
         public ICollection<Order>? Orders { get; set; }

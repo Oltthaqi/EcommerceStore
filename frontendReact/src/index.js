@@ -11,25 +11,15 @@ import {
 import "bootstrap";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/js/bootstrap.js";
-import $ from "jquery";
-import Popper from "popper.js";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { configureStore } from "@reduxjs/toolkit";
-import { Provider } from "react-redux";
-import userReducer from "./components/features/user.js";
-
-const store = configureStore({
-  reducer: {
-    user: userReducer,
-  },
-});
+import "mdb-react-ui-kit/dist/css/mdb.min.css";
+import "@fortawesome/fontawesome-free/css/all.min.css";
+import "react-pro-sidebar/dist/css/styles.css";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <BrowserRouter>
-    <Provider store={store}>
-      <App />
-    </Provider>
+    <App />
   </BrowserRouter>
 );
 

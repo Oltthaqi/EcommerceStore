@@ -1,38 +1,32 @@
-import Home from "./components/home/Home.jsx";
-import Navbar from "./components/navbar/Navbar.jsx";
-import Login from "./components/LoginRegister/LoginRegister.jsx";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  useLocation,
-} from "react-router-dom";
-import Carausel from "./components/home/carousel.jsx";
+import React, { useState } from "react";
+import { Route, Routes } from "react-router-dom";
+import Products from "./components/Products/Products";
+import Home from "./components/home/Home";
+import Login from "./components/LoginRegister/LoginRegister";
 
 function App() {
-  const location = useLocation();
+  const [category, setCategory] = useState([]);
 
-  const isLoginPage = location.pathname === "/login";
+  const handleCategoryChange = (event) => {
+    const value = event.target.value;
+    setCategory(typeof value === "string" ? value.split(",") : value);
+  };
 
   return (
     <div className="App">
-      <div>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-        </Routes>
-        <ToastContainer />
-      </div>
-      {!isLoginPage && (
-        <div>
-          <Navbar />
-
-          <Routes>
-            <Route path="/" element={<Home />} />
-          </Routes>
-        </div>
-      )}
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/" element={<Home />} />
+        <Route
+          path="/products"
+          element={
+            <Products
+              category={category}
+              onCategoryChange={handleCategoryChange}
+            />
+          }
+        />
+      </Routes>
     </div>
   );
 }

@@ -42,7 +42,7 @@ namespace Ecomerce_Store.Controllers
 
 
         [HttpPost("Register")]
-        public async Task<ActionResult<Users>> Register(Users u)
+        public async Task<ActionResult<Users>> Register([FromForm]Users u)
         {
             
             
@@ -63,27 +63,27 @@ namespace Ecomerce_Store.Controllers
                 }
                 else
                 {
-                    return BadRequest("Id is used already");
+                    return BadRequest("Id is already used!");
                 }
             
         }
 
 
-        [HttpPost]
-        public async Task<ActionResult<Users>> AddUsers([FromForm] Users u)
-        {
-            if (u.UserId == 0)
-            {
-                u.Orders = null;
-                _dataContext.Users.Add(u);
-                await _dataContext.SaveChangesAsync();
-                return CreatedAtAction(nameof(Get), new { id = u.UserId }, u);
-            }
-            else
-            {
-                return BadRequest("You can not use this Id because it is used");
-            }
-        }
+        //[HttpPost]
+        //public async Task<ActionResult<Users>> AddUsers([FromForm] Users u)
+        //{
+        //    if (u.UserId == 0 || u.UserId == null)
+        //    {
+        //        u.Orders = null;
+        //        _dataContext.Users.Add(u);
+        //        await _dataContext.SaveChangesAsync();
+        //        return CreatedAtAction(nameof(Get), new { id = u.UserId }, u);
+        //    }
+        //    else
+        //    {
+        //        return BadRequest("This id is already in use!");
+        //    }
+        //}
 
 
 

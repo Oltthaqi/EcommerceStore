@@ -1,0 +1,26 @@
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+.MainDiv{
+  display: flex;
+  flex-direction: column;
+}
+.centerDiv {
+  display: flex;
+}
+.cardsContainer {
+  display: flex;
+  justify-content: right;
+}
+
+.filterdiv {
+  margin-top: 50px;
+  width: 100px;
+}
+.filterDropdown {
+  margin: 0 auto;
+}

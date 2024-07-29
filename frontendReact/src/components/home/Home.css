@@ -1,5 +1,5 @@
 body {
-  font-family: 'Poppins', "sans-serif";
+  font-family: "Poppins", "sans-serif";
 }
 
 .home-content {
@@ -28,7 +28,7 @@ body {
   background-color: green;
   color: white;
   border: none;
-  padding: 10px 40px;
+  padding: 11px 40px;
   border-radius: 5px;
   cursor: pointer;
   font-size: 16px;
