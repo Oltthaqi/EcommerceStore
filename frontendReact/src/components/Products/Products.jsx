@@ -1,7 +1,6 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import "./products.css";
-import { toast } from "react-toastify";
 import {
   MDBContainer,
   MDBRow,
@@ -17,20 +16,47 @@ import Footer from "../footer/footer";
 import Sidebar from "./Sidebar";
 import "react-pro-sidebar/dist/css/styles.css";
 import Navbar from "../navbar/Navbar";
+import Typography from "@mui/material/Typography";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
 
-const Products = ({ category, onCategoryChange }) => {
+const Products = ({
+  category,
+  onCategoryChange,
+  priceRange,
+  onChangePrice,
+  showAvailableOnly,
+  onChangeAvailability,
+}) => {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [page, setPage] = React.useState(1);
+  const [pagesLength, setPagesLength] = React.useState(0);
+  const handleChange = (event, value) => {
+    setPage(value);
+  };
+  let aPageslength = products.length / 9 + 1;
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         setLoading(true);
         const response = await axios.get("https://localhost:7196/api/Product");
+        var productsPerPage = [];
+        if (page === 1) {
+          productsPerPage = response.data.slice(0, 9);
+        } else {
+          productsPerPage = response.data.slice(
+            (page - 1) * 10,
+            (page - 1) * 10 + 9
+          );
+        }
+
+        setPagesLength(Math.ceil(aPageslength));
         setProducts(response.data);
-        setFilteredProducts(response.data);
+        setFilteredProducts(productsPerPage);
         setError(null);
       } catch (error) {
         setError("Error fetching products. Please try again later.");
@@ -41,19 +67,42 @@ const Products = ({ category, onCategoryChange }) => {
     };
 
     fetchProducts();
-  }, []);
+  }, [page]);
 
   useEffect(() => {
-    // Ensure category is an array
     const categoryArray = Array.isArray(category) ? category : [];
-    if (categoryArray.length === 0) {
-      setFilteredProducts(products);
-    } else {
-      setFilteredProducts(
-        products.filter((product) => categoryArray.includes(product.category))
+    let filtered = products;
+
+    if (categoryArray.length > 0) {
+      filtered = filtered.filter((product) =>
+        categoryArray.includes(product.category)
       );
     }
-  }, [category, products]);
+
+    if (priceRange && priceRange.length === 2) {
+      filtered = filtered.filter(
+        (product) =>
+          product.price >= priceRange[0] && product.price <= priceRange[1]
+      );
+    }
+
+    if (showAvailableOnly) {
+      filtered = filtered.filter((product) => product.available === "yes");
+    }
+    let aPagesLength = filtered.length / 9 + 1;
+    setPagesLength(Math.ceil(aPagesLength));
+
+    var productsPerPage;
+    if (page === 1) {
+      productsPerPage = filtered.slice(0, 9);
+    } else {
+      productsPerPage = filtered.slice(
+        (page - 1) * 10,
+        (page - 1) * 10 + filtered.length
+      );
+    }
+    setFilteredProducts(productsPerPage);
+  }, [category, priceRange, showAvailableOnly, products]);
 
   const renderStars = (rating) => {
     const fullStars = Math.floor(rating);
@@ -89,7 +138,13 @@ const Products = ({ category, onCategoryChange }) => {
     <div className="MainDiv">
       <Navbar />
       <div className="centerDiv">
-        <Sidebar category={category} onCategoryChange={onCategoryChange} />
+        <Sidebar
+          category={category}
+          onCategoryChange={onCategoryChange}
+          onChangePrice={onChangePrice}
+          showAvailableOnly={showAvailableOnly}
+          onChangeAvailability={onChangeAvailability}
+        />
         <div className="cardsContainer">
           <MDBContainer fluid className="my-5">
             {loading ? (
@@ -102,49 +157,40 @@ const Products = ({ category, onCategoryChange }) => {
               </div>
             ) : (
               <MDBRow>
-                {filteredProducts.map((product) => (
-                  <MDBCol
-                    key={product.id}
-                    md="12"
-                    lg="4"
-                    className="mb-4 mb-lg-0"
-                  >
+                {filteredProducts.map((p) => (
+                  <MDBCol key={p.id} md="12" lg="4" className="mb-4 mb-lg-0">
                     <div className="product-card">
                       <MDBCard>
                         <div className="d-flex justify-content-between p-3">
-                          <p className="lead mb-0">{product.name}</p>
+                          <p className="lead mb-0">{p.name}</p>
                         </div>
                         <MDBCardImage
-                          src={`data:image/jpeg;base64,${product.img}`}
+                          src={`data:image/jpeg;base64,${p.img}`}
                           position="top"
-                          alt={product.name}
+                          alt={p.name}
                         />
-                        {product.priceDiscount == null ? (
+                        {p.priceDiscount == null ? (
                           <MDBCardBody>
                             <div className="d-flex justify-content-between">
                               <p className="small">
                                 <a href="#!" className="text-muted">
-                                  {product.category}
+                                  {p.category}
                                 </a>
                               </p>
                             </div>
 
                             <div className="d-flex justify-content-between mb-3">
-                              <h5 className="mb-0">{product.name}</h5>
-                              <h5 className="text-dark mb-0">
-                                ${product.price}
-                              </h5>
+                              <h5 className="mb-0">{p.name}</h5>
+                              <h5 className="text-dark mb-0">${p.price}</h5>
                             </div>
 
                             <div className="d-flex justify-content-between mb-2">
                               <p className="text-muted mb-0">
                                 Available:{" "}
-                                <span className="fw-bold">
-                                  {product.available}
-                                </span>
+                                <span className="fw-bold">{p.available}</span>
                               </p>
                               <div className="ms-auto text-warning">
-                                {renderStars(product.rating)}
+                                {renderStars(p.rating)}
                               </div>
                             </div>
                           </MDBCardBody>
@@ -153,30 +199,28 @@ const Products = ({ category, onCategoryChange }) => {
                             <div className="d-flex justify-content-between">
                               <p className="small">
                                 <a href="#!" className="text-muted">
-                                  {product.category}
+                                  {p.category}
                                 </a>
                               </p>
                               <p className="small text-danger">
-                                <s>${product.price}</s>
+                                <s>${p.price}</s>
                               </p>
                             </div>
 
                             <div className="d-flex justify-content-between mb-3">
-                              <h5 className="mb-0">{product.name}</h5>
+                              <h5 className="mb-0">{p.name}</h5>
                               <h5 className="text-dark mb-0">
-                                ${product.priceDiscount}
+                                ${p.priceDiscount}
                               </h5>
                             </div>
 
                             <div className="d-flex justify-content-between mb-2">
                               <p className="text-muted mb-0">
                                 Available:{" "}
-                                <span className="fw-bold">
-                                  {product.available}
-                                </span>
+                                <span className="fw-bold">{p.available}</span>
                               </p>
                               <div className="ms-auto text-warning">
-                                {renderStars(product.rating)}
+                                {renderStars(p.rating)}
                               </div>
                             </div>
                           </MDBCardBody>
@@ -189,6 +233,15 @@ const Products = ({ category, onCategoryChange }) => {
             )}
           </MDBContainer>
         </div>
+      </div>
+      <div className="Pages">
+        <Stack spacing={2}>
+          <Pagination
+            count={pagesLength - 1}
+            page={page}
+            onChange={handleChange}
+          />
+        </Stack>
       </div>
       <Footer style={{ display: "block" }} />
     </div>

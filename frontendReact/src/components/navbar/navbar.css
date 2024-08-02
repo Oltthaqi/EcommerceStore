@@ -182,3 +182,16 @@ body {
 .navtext:hover {
   color: #fff; /* White color on hover */
 }
+.cardimgbtn {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  z-index: 100;
+  margin-right: 20px;
+  margin-bottom: 10px;
+}
+.cartimg {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+}

@@ -5,7 +5,7 @@ body {
   margin: 0;
   padding: 0;
 }
-.MainDiv{
+.MainDiv {
   display: flex;
   flex-direction: column;
 }
@@ -23,4 +23,9 @@ body {
 }
 .filterDropdown {
   margin: 0 auto;
+}
+.Pages {
+  display: flex;
+  margin: 0 auto;
+  margin-bottom: 30px;
 }

@@ -6,7 +6,7 @@ import { jwtDecode } from "jwt-decode";
 import { toast } from "react-toastify";
 import prfimg from "../../assets/prfplaceholder.png";
 import Dropdown from "react-bootstrap/Dropdown";
-import { useSelector } from "react-redux";
+import addtoCard from "../../assets/card.png";
 
 const Navbar = () => {
   const [image, setImage] = useState("");
@@ -49,8 +49,6 @@ const Navbar = () => {
       getuserandimg();
     }
   }, [username]);
-  // console.log(user.username);
-  const handleprofilepic = async () => {};
 
   return (
     <nav className="navbar">
@@ -77,6 +75,10 @@ const Navbar = () => {
         {loggedIn ? (
           <>
             <span className="navtext">Welcome back, {username}!</span>
+            <a href="/Cart" className="cardimgbtn">
+              <img src={addtoCard} alt="" className="cartimg" />
+            </a>
+
             <div className="profile-pic">
               <button className="profile-pic-button ">
                 <Dropdown className="profile-pic-button">
@@ -95,6 +97,7 @@ const Navbar = () => {
                     </Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
+
                 <img
                   src={image ? `data:image/jpeg;base64,${image}` : prfimg}
                   alt="Profile"

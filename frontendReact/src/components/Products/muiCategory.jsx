@@ -9,9 +9,11 @@ import axios from "axios";
 import Box from "@mui/material/Box";
 import Slider from "@mui/material/Slider";
 import { Typography } from "@mui/material";
+import Checkbox from "@mui/material/Checkbox";
+import FormControlLabel from "@mui/material/FormControlLabel";
 
-const MAX = 100;
-const MIN = 0;
+var MAX;
+var MIN;
 const marks = [
   {
     value: MIN,
@@ -46,11 +48,23 @@ function getStyles(name, selectedCategories, theme) {
   };
 }
 
-const CategoryFilter = ({ category, onCategoryChange }) => {
+const CategoryFilter = ({
+  category,
+  onCategoryChange,
+  onChangePrice,
+  showAvailableOnly,
+  onChangeAvailability,
+}) => {
   const theme = useTheme();
   const [availableCategories, setAvailableCategories] = useState([]);
   const [value, setValue] = React.useState([]);
   const [minValue, setMinValue] = React.useState("");
+  const [checked, setChecked] = React.useState(true);
+  // const [MAXtext , setMAXtext] = React.useState(0)
+  // const [MINtext , setMINtext] = React.useState(0)
+  const handleCheckboxCheck = (event) => {
+    onChangeAvailability(event.target.checked);
+  };
 
   const handleChangeSlider = (event, newValue, activeThumb) => {
     if (!Array.isArray(newValue)) {
@@ -62,30 +76,23 @@ const CategoryFilter = ({ category, onCategoryChange }) => {
     } else {
       setValue([value[0], Math.max(newValue[1], value[0] + minValue)]);
     }
+    if (typeof onChangePrice === "function") {
+      onChangePrice(newValue);
+    } else {
+      console.error("onChangePrice is not a function:", onChangePrice);
+    }
   };
   useEffect(() => {
     axios
       .get("https://localhost:7196/api/Product")
       .then((response) => {
-        const prices = Array.from(
-          new Set(response.data.map((product) => product.price))
-        );
-        let minValue = prices[0];
-        let maxValue = prices[0];
-
-        for (let i = 1; i < response.data.length; i++) {
-          if (prices[i] < minValue) {
-            minValue = prices[i];
-          }
-        }
-        for (let i = 1; i < response.data.length; i++) {
-          if (prices[i] > maxValue) {
-            maxValue = prices[i];
-          }
-        }
-        console.log(maxValue);
-
+        const prices = response.data.map((product) => product.price);
+        const minValue = Math.min(...prices);
+        const maxValue = Math.max(...prices);
+        // console.log(minValue);
         setValue([minValue, maxValue]);
+        MAX = maxValue;
+        MIN = minValue;
       })
       .catch((error) => {
         console.error("Error fetching Prices:", error);
@@ -110,7 +117,7 @@ const CategoryFilter = ({ category, onCategoryChange }) => {
   const handleChange = (event) => {
     const { value } = event.target;
     if (typeof onCategoryChange === "function") {
-      onCategoryChange(event); // Ensure this calls the function correctly
+      onCategoryChange(event);
     } else {
       console.error("onCategoryChange is not a function:", onCategoryChange);
     }
@@ -119,8 +126,8 @@ const CategoryFilter = ({ category, onCategoryChange }) => {
   const selectedCategories = Array.isArray(category) ? category : [];
 
   return (
-    <div>
-      <FormControl sx={{ m: 1, width: 170 }}>
+    <div className="StickyFilter">
+      <FormControl sx={{ m: 3, width: 170 }}>
         <InputLabel id="demo-multiple-name-label">Category</InputLabel>
         <Select
           labelId="demo-multiple-name-label"
@@ -142,10 +149,10 @@ const CategoryFilter = ({ category, onCategoryChange }) => {
           ))}
         </Select>
       </FormControl>
-      <Box sx={{ width: 170, m: 1 }}>
+      <Box sx={{ width: 170, m: 3 }}>
         <Slider
           marks={marks}
-          step={10}
+          step={1}
           value={value}
           valueLabelDisplay="auto"
           min={MIN}
@@ -155,19 +162,31 @@ const CategoryFilter = ({ category, onCategoryChange }) => {
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
           <Typography
             variant="body2"
-            onClick={() => setValue(MIN)}
+            onClick={() => setValue([MIN, value[1]])}
             sx={{ cursor: "pointer" }}
           >
             {MIN} min
           </Typography>
           <Typography
             variant="body2"
-            onClick={() => setValue(MAX)}
+            onClick={() => setValue([value[0], MAX])}
             sx={{ cursor: "pointer" }}
           >
             {MAX} max
           </Typography>
         </Box>
+      </Box>
+      <Box sx={{ m: 2 }}>
+        <FormControlLabel
+          label="Show Only availeable"
+          control={
+            <Checkbox
+              checked={showAvailableOnly}
+              onChange={handleCheckboxCheck}
+              inputProps={{ "aria-label": "controlled" }}
+            />
+          }
+        />
       </Box>
     </div>
   );

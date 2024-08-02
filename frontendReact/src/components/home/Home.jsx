@@ -4,7 +4,7 @@ import CarouselHomePage from "./carousel";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import Navbar from "../navbar/Navbar.jsx";
 import { Link } from "react-router-dom";
 import Footer from "../footer/footer.jsx";
 import {
@@ -69,6 +69,7 @@ const Home = () => {
   };
   return (
     <div className="home-content">
+      <Navbar />
       <CarouselHomePage />
       <div className="productsOfTheWeek">
         {products.length > 0 ? (

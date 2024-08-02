@@ -3,10 +3,7 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  BrowserRouter,
+  BrowserRouter as BrowserRouter,
 } from "react-router-dom";
 import "bootstrap";
 import "bootstrap/dist/css/bootstrap.css";
