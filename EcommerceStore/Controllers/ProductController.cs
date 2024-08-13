@@ -24,6 +24,13 @@ namespace Ecomerce_Store.Controllers
             return Ok(products);
         }
 
+        [HttpGet("Id")]
+        public async Task<ActionResult<List<Product>>> GetById(int id)
+        {
+            var products = await _dataContext.Products.FirstOrDefaultAsync(p => p.Id == id);
+            return Ok(products);
+        }
+
         [HttpPost]
         public async Task<ActionResult<Product>> AddProducts([FromForm] Product p, IFormFile file)
         {

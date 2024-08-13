@@ -32,8 +32,9 @@ const Products = ({
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [page, setPage] = React.useState(1);
-  const [pagesLength, setPagesLength] = React.useState(0);
+  const [page, setPage] = useState(1);
+  const [pagesLength, setPagesLength] = useState(0);
+
   const handleChange = (event, value) => {
     setPage(value);
   };
@@ -134,6 +135,12 @@ const Products = ({
     );
   };
 
+  const handleAddToCart = (productId) => {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    cart.push(productId);
+    localStorage.setItem("cart", JSON.stringify(cart));
+  };
+
   return (
     <div className="MainDiv">
       <Navbar />
@@ -193,6 +200,12 @@ const Products = ({
                                 {renderStars(p.rating)}
                               </div>
                             </div>
+                            <button
+                              className="btn btn-primary"
+                              onClick={() => handleAddToCart(p.id)}
+                            >
+                              Add to Cart
+                            </button>
                           </MDBCardBody>
                         ) : (
                           <MDBCardBody>
@@ -223,6 +236,12 @@ const Products = ({
                                 {renderStars(p.rating)}
                               </div>
                             </div>
+                            <button
+                              className="btn btn-primary"
+                              onClick={() => handleAddToCart(p.id)}
+                            >
+                              Add to Cart
+                            </button>
                           </MDBCardBody>
                         )}
                       </MDBCard>

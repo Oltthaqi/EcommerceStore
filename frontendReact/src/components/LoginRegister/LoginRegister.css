@@ -1,0 +1,36 @@
+.form-container {
+  max-width: 380px;
+  margin: auto;
+}
+
+.form-container input,
+.form-container button {
+  margin-bottom: 10px;
+  font-size: 14px;
+  padding: 8px;
+}
+
+.form-container button {
+  width: 100%;
+}
+
+.form-container .title {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.form-container .ghost-button {
+  font-size: 14px;
+  padding: 8px 20px;
+}
+
+.form-container .overlay-panel {
+  padding: 20px;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}

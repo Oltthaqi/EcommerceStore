@@ -4,6 +4,10 @@ import Products from "./components/Products/Products";
 import Home from "./components/home/Home";
 import Login from "./components/LoginRegister/LoginRegister";
 import Cart from "./components/Cart/Cart";
+import Admin from "./components/Admin/Admin";
+import UsersDash from "./components/Admin/UsersDash";
+import OrdersDash from "./components/Admin/OrdersDash";
+import OrderDetails from "./components/Admin/Details/OrderDetails";
 
 function App() {
   const [category, setCategory] = useState([]);
@@ -25,6 +29,10 @@ function App() {
     <div className="App">
       <Routes>
         <Route path="/Cart" element={<Cart />} />
+        <Route path="/Admin" element={<Admin />} />
+        <Route path="/Admin/Users" element={<UsersDash />} />
+        <Route path="/Admin/Orders" element={<OrdersDash />} />
+        <Route path="/Admin/Orders/Details" element={<OrderDetails />} />
         <Route path="/login" element={<Login />} />
         <Route path="/" element={<Home />} />
         <Route path="/Products" element={<Products />} />

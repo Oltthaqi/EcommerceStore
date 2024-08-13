@@ -12,7 +12,6 @@ namespace Ecomerce_Store.Model
         public string? Surname { get; set; }
         public string? Password { get; set; }
         public string? Role { get; set; }
-        public byte[]? Profileimg { get; set; }
         public string? profileImgBase64 { get; set; }
 
 

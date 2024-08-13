@@ -29,7 +29,7 @@ namespace Ecomerce_Store.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Order>> CreateOrder( [FromForm]CreateOrderDto orderDto)
+        public async Task<ActionResult<Order>> CreateOrder( CreateOrderDto orderDto)
         {
             // Validate input
             if (orderDto == null || orderDto.ProductList == null || orderDto.ProductList.ProductIds == null || orderDto.ProductList.ProductIds.Count == 0)
@@ -52,9 +52,6 @@ namespace Ecomerce_Store.Controllers
                 }
             }
 
-            // Calculate total amount based on products or other business logic
-
-            // Create a new Order object
             var order = new Order
             {
                // ProductId = 1,

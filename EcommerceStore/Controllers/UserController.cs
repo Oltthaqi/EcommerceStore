@@ -40,6 +40,20 @@ namespace Ecomerce_Store.Controllers
             }
         }
 
+        [HttpGet("ID")]
+        public async Task<ActionResult<Users>> GetById(int id)
+        {
+            if (id != 0)
+            {
+                var user = await _dataContext.Users.FirstOrDefaultAsync(x => x.UserId == id);
+                return Ok(user);
+            }
+            else
+            {
+                return BadRequest("ID is not valid!");
+            }
+        }
+
 
         [HttpPost("Register")]
         public async Task<ActionResult<Users>> Register([FromForm]Users u)
@@ -51,8 +65,8 @@ namespace Ecomerce_Store.Controllers
                 {
 
 
-                    byte[] byteArray = Convert.FromBase64String(u.profileImgBase64);
-                        u.Profileimg = byteArray;
+                    //byte[] byteArray = Convert.FromBase64String(u.profileImgBase64);
+                       
                         u.Orders = null;
                         u.Password = Password;
                         u.Role = "Client";
@@ -69,21 +83,6 @@ namespace Ecomerce_Store.Controllers
         }
 
 
-        //[HttpPost]
-        //public async Task<ActionResult<Users>> AddUsers([FromForm] Users u)
-        //{
-        //    if (u.UserId == 0 || u.UserId == null)
-        //    {
-        //        u.Orders = null;
-        //        _dataContext.Users.Add(u);
-        //        await _dataContext.SaveChangesAsync();
-        //        return CreatedAtAction(nameof(Get), new { id = u.UserId }, u);
-        //    }
-        //    else
-        //    {
-        //        return BadRequest("This id is already in use!");
-        //    }
-        //}
 
 
 
